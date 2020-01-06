@@ -15,7 +15,7 @@
                    .create();
  ```
 
-
+![压缩的实例图片](https://github.com/CoderWalterXu/CompressSample/blob/master/screenshot/S00106-225651.jpg)
 
 
 fix bug:
