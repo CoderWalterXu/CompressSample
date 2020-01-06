@@ -1,5 +1,5 @@
 # CompressSample
-图片压缩示例，支持单图和多图
+图片压缩示例，支持多图，建造者模式
 
 ```
  compressConfig = CompressConfig.builder()
