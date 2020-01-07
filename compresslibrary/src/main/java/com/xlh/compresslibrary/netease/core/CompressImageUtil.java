@@ -15,25 +15,56 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.LinkedBlockingDeque;
+import java.util.concurrent.RejectedExecutionHandler;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author: Watler Xu
  * time:2020/1/6
  * description:压缩图片
- * version:0.0.1
+ * version:0.0.2
  */
 public class CompressImageUtil {
     private Context context;
     private CompressConfig config;
     private Handler mHandler = new Handler();
+    // 压缩图片任务队列
+    private LinkedBlockingDeque<Runnable> mQueue = new LinkedBlockingDeque<>();
+    // 线程池
+    private ThreadPoolExecutor mThreadPoolExecutor = new ThreadPoolExecutor(3, 9, 15, TimeUnit.SECONDS, new ArrayBlockingQueue<Runnable>(3),
+            new RejectedExecutionHandler() {
+                @Override
+                public void rejectedExecution(Runnable runnable, ThreadPoolExecutor threadPoolExecutor) {
+                    addTask(runnable);
+                }
+            });
 
     public CompressImageUtil(Context context) {
-        this.context = context;
+        this(context, null);
     }
 
     public CompressImageUtil(Context context, CompressConfig config) {
         this.context = context;
         this.config = config == null ? CompressConfig.getDefaultConfig() : config;
+    }
+
+
+    /**
+     * 将压缩图片任务，添加到队列中
+     *
+     * @param runnable
+     */
+    public void addTask(Runnable runnable) {
+        if (runnable != null) {
+            try {
+                mQueue.put(runnable);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     public void compress(String imgPath, CompressResultListener listener) {
@@ -107,8 +138,8 @@ public class CompressImageUtil {
             sendMsg(false, imgPath, "质量压缩失败，bitmap为空", listener);
             return;
         }
-        //
-        new Thread(new Runnable() {
+        // 压缩图片线程
+        Runnable mRunnable = new Runnable() {
             @Override
             public void run() {
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -148,7 +179,11 @@ public class CompressImageUtil {
                     e.printStackTrace();
                 }
             }
-        }).start();
+        };
+
+        // 线程池执行任务
+        mThreadPoolExecutor.execute(mRunnable);
+
     }
 
     private File getThumbnailFile(File file) {

@@ -105,7 +105,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 .setShowCompressDialog(true) // 是否显示压缩进度条，默认值：false
                 .create();
 
-        compressMore();
+//        compressMore();
 
     }
 
