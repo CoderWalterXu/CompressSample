@@ -16,11 +16,14 @@
  ```
 
 ![压缩的示例图片](https://github.com/CoderWalterXu/CompressSample/blob/master/screenshot/S00106-225651.jpg)
+![压缩的示例图片](https://note.youdao.com/yws/api/personal/file/9EE5C380D6C4410E834B1D0C8A9D31E5?method=download&shareKey=7c23b782cc8e0fb134e6516603288f38)
+
 
 
 fix bug:
 * 修复传入已经符合压缩大小的图片，没有返回图片路径的问题
 * 修复保留源图片不生效的问题
+* 使用线程池代替new Thread
 
 
 参考了：https://github.com/VincentStory/CompressImage
