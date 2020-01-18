@@ -16,7 +16,6 @@
  ```
 
 ![压缩的示例图片](https://github.com/CoderWalterXu/CompressSample/blob/master/screenshot/S00106-225651.jpg)
-![压缩的示例图片](https://note.youdao.com/yws/api/personal/file/9EE5C380D6C4410E834B1D0C8A9D31E5?method=download&shareKey=7c23b782cc8e0fb134e6516603288f38)
 
 
 
